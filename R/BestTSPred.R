@@ -133,7 +133,17 @@ setMethod(
       })
 
 
-      output <- rbindlist(Results)
+      output <- rbindlist(Results, fill = TRUE)
+      outputNames <- names(output)
+      actualVarNames <- c()
+      for (vn in VarNames){
+
+        predVN <- outputNames[grep(vn, outputNames)][1]
+        varName <- substr(predVN, 5, nchar(predVN))
+        actualVarNames <- c(actualVarNames, varName)
+
+      }
+      VarNames <- actualVarNames[!is.na(actualVarNames)]
       IDQuals <- setdiff(names(output), c(paste0('Pred', VarNames), paste0('STD', VarNames), 'TSPred'))
 
       Results <- lapply(VarNames, function(var){
